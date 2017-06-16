@@ -1,0 +1,40 @@
+#include "c.ceu"
+#include "sdl/sdl.ceu"
+#include "global.ceu"
+#include "init.ceu"
+#include "cloud.ceu"
+#include "tiro.ceu"
+#include "player.ceu"
+#include "game.ceu"
+#include "pregame.ceu"
+#include "lose.ceu"
+#include "win.ceu"
+
+watching sdl do
+    native/pre do
+        ##include <time.h>
+        ##include <stdio.h>
+    end
+    _srand(_time(null));
+    img = spawn SDL_Open_Image(&sdl!.ren, "si64.png");
+	imgpl = spawn SDL_Open_Image(&sdl!.ren, "player.png");
+    ammo = spawn SDL_Open_Sound("click1.wav");
+    explosion = spawn SDL_Open_Sound("explosion.mp3");
+    win = spawn SDL_Open_Sound("win.mp3");
+    lose = spawn SDL_Open_Sound("lose.mp3");
+	font = spawn SDL_Open_Font("font.ttf", 40);
+	txtPre = spawn SDL_New_Text(&sdl!.ren, &font.font, "Press <- to start", SDL_Color(0x00,0xFF,0xFF,0xFF));
+	txtWin = spawn SDL_New_Text(&sdl!.ren, &font.font, "You Win", SDL_Color(0x00,0xFF,0x00,0xFF));
+	txtLose = spawn SDL_New_Text(&sdl!.ren, &font.font, "You Lose :/", SDL_Color(0xFF,0x00,0x00,0xFF));
+    var int res;
+    loop do
+      await Pre_Game();
+      res = await Game();
+      if res > 0 then
+        await Win();
+      else
+        await Lose();
+      end
+    end
+end
+escape 0;

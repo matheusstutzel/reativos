@@ -1,0 +1,38 @@
+var int vx=50;
+code/await Cloud (var float x,var float y)
+	-> (var SDL_Rect r, event void go_collided)
+  -> int do
+        var int w = 50;
+        var int h = 50;
+		    r = val SDL_Rect(x as int,y as int, w,h);
+        var int vy = w;
+				var int lastvx = outer.vx;
+
+        par/or do
+            var int dt;
+            every dt in SDL_DT do
+                x = x  + (outer.vx*(dt)/1000);
+                if x + w >= outer.scrw or x<=0 then
+                    outer.vx = -outer.vx;
+                end
+								if lastvx != outer.vx then
+									lastvx = outer.vx;
+									y = y + vy;
+								end
+            end
+        with
+		    do
+          await go_collided;
+					_Mix_PlayChannel(-1, &&outer.explosion.sound, 0);
+        end
+	       with
+            every SDL_REDRAW do
+                r.x = x as int;
+                r.y = y as int;
+								_SDL_RenderCopy(&&outer.sdl!.ren, &&outer.img.tex.tex, null, &&r as _SDL_Rect&&);
+								//_SDL_SetRenderDrawColor(&&outer.sdl!.ren, 0xDD,0xDD,0xDD,0xFF);
+                //_SDL_RenderFillRect(&&outer.sdl!.ren, (&&r as _SDL_Rect&&));
+            end
+        end
+        escape 0;
+end

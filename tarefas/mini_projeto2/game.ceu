@@ -1,0 +1,45 @@
+code/await Game(void) -> int do
+  pool[] Cloud clouds;
+
+  pool[] Tiro tiros;
+  var int i;
+  var int j;
+
+  var int y ;
+  var int x ;
+  loop i in [1 -> 4] do
+    loop j in [1 -> 9] do
+      y = 60*i;
+      x = 60 * j;
+      if y > outer.scrh*0.5 or x>outer.scrw then
+        break;
+      end
+      spawn Cloud(x,y) in clouds;
+    end
+  end
+
+  spawn Player(&tiros);
+
+  every SDL_DT do
+    var&? Cloud c1;
+    var&? Tiro t;
+    var int teste = 0 ;
+    loop c1 in clouds do
+      teste = teste + 1;
+      if (c1!.r.y > ((outer.scrh*0.8) as int)) then
+        escape -1;
+      end
+      loop t in tiros do
+        if call Intersects(&t!.r,&c1!.r) then
+          emit c1!.go_collided;
+          emit t!.go_collided;
+          break;
+        end
+      end
+    end
+    if teste == 0 then
+      escape 1;
+    end
+  end
+    escape 0;
+end

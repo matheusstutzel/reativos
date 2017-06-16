@@ -1,0 +1,9 @@
+code/await Win(void) -> void do
+  var SDL_Rect txt_rct = val SDL_Rect((outer.scrh-outer.txtWin.tex.width)/2, outer.scrh/2, outer.txtWin.tex.width, outer.txtWin.tex.height);
+  _Mix_PlayChannel(-1, &&outer.win.sound, 0);
+  watching 2s do
+    every SDL_REDRAW do
+      _SDL_RenderCopy(&&outer.sdl!.ren, &&outer.txtWin.tex.tex, null, &&txt_rct as _SDL_Rect&&);
+    end
+  end
+end

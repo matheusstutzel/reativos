@@ -1,0 +1,26 @@
+
+code/await Tiro (var float x, var float y)
+	-> (var SDL_Rect r, event void go_collided)
+	-> int do
+				_Mix_PlayChannel(-1, &&outer.ammo.sound, 0);
+        var int vy = -250;
+        r = val SDL_Rect(x as int,0, 5,15);
+        par/or do
+            var int dt;
+            every dt in SDL_DT do
+                y = (y + vy*dt/1000.0);
+                if y < 0 then
+                    escape 0;
+                end
+            end
+        with
+            every SDL_REDRAW do
+                _SDL_SetRenderDrawColor(&&outer.sdl!.ren, 0x00,0x00,0x00,0xFF);
+                r.y = y as int;
+                _SDL_RenderFillRect(&&outer.sdl!.ren, (&&r as _SDL_Rect&&));
+            end
+		with
+			await go_collided;
+			escape 0;
+    end
+end

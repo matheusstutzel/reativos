@@ -1,0 +1,1 @@
+var&? SDL_Init sdl = spawn SDL_Init("Space Invaders", scrw,scrh, SDL_Color(0x3B,0x40,0x47,0xFF));

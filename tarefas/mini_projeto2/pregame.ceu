@@ -1,0 +1,12 @@
+
+code/await Pre_Game(void) -> void do
+  var SDL_Rect txt_rct = val SDL_Rect((outer.scrh-outer.txtPre.tex.width)/2, outer.scrh/2, outer.txtPre.tex.width, outer.txtPre.tex.height); 
+  par/or do
+        var _SDL_KeyboardEvent&& key;
+		key = await SDL_KEYDOWN until key:keysym.sym==_SDLK_LEFT;
+    with
+        every SDL_REDRAW do
+            _SDL_RenderCopy(&&outer.sdl!.ren, &&outer.txtPre.tex.tex, null, &&txt_rct as _SDL_Rect&&);
+        end
+    end
+end
